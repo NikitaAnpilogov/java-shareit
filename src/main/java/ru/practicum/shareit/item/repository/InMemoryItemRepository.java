@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
-public class InMemoryItemRepository implements ItemRepository{
+public class InMemoryItemRepository implements ItemRepository {
     private final Map<Long, Item> items = new HashMap<>();
     private Long idCounter = 1L;
 
