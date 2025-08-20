@@ -1,5 +1,6 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AllArgsConstructor;
@@ -15,17 +16,33 @@ import java.time.LocalDateTime;
 /**
  * TODO Sprint add-bookings.
  */
+@Entity
+@Table(name = "bookings")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Booking {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @FutureOrPresent
+    @Column(name = "start_time")
     private LocalDateTime start;
+
     @Future
+    @Column(name = "end_time")
     private LocalDateTime end;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
     private Item item;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User booker;
+
+    @Enumerated(EnumType.STRING)
     private BookingStatus status;
 }

@@ -1,44 +1,50 @@
 package ru.practicum.shareit.user;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
  */
 @RestController
-@RequestMapping(path = "/users")
 @RequiredArgsConstructor
+@RequestMapping(path = "/users")
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public UserDto create(@RequestBody UserDto userDto) {
-        return userService.create(userDto);
-    }
-
-    @PatchMapping("/{userId}")
-    public UserDto update(@PathVariable Long userId,
-                          @RequestBody UserDto userDto) {
-        return userService.update(userId, userDto);
+    @GetMapping
+    public Collection<UserDto> findUsers() {
+        return userService.findAll();
     }
 
     @GetMapping("/{userId}")
-    public UserDto getById(@PathVariable Long userId) {
-        return userService.getById(userId);
+    public UserDto findUserById(@PathVariable Long userId) {
+        return userService.findById(userId);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto createUser(@RequestBody @Valid User user) {
+        return userService.create(user);
+    }
+
+    @PatchMapping("/{userId}")
+    public UserDto updateUser(@PathVariable Long userId,
+                              @RequestBody User updUser) {
+        return userService.update(userId, updUser);
     }
 
     @DeleteMapping("/{userId}")
-    public void delete(@PathVariable Long userId) {
-        userService.delete(userId);
+    public void deleteUser(@PathVariable Long userId) {
+        userService.deleteUserById(userId);
     }
 
-    @GetMapping
-    public List<UserDto> getAll() {
-        return userService.getAll();
-    }
 }
