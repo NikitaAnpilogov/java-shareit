@@ -10,7 +10,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
@@ -61,5 +60,4 @@ public class ItemController {
                                  @RequestBody CommentRequest request) {
         return itemService.addNewComment(itemId, userId, request);
     }
-
 }
