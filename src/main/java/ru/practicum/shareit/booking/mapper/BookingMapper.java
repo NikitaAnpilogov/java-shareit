@@ -10,6 +10,9 @@ import java.util.Collection;
 
 public class BookingMapper {
     public static BookingDto mapToBookingDto(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
         return new BookingDto(booking.getId(),
                 booking.getStart(),
                 booking.getEnd(),
@@ -20,12 +23,18 @@ public class BookingMapper {
     }
 
     public static Collection<BookingDto> mapToBookingDtoList(Collection<Booking> bookings) {
+        if (bookings == null) {
+            return null;
+        }
         return bookings.stream()
                 .map(BookingMapper::mapToBookingDto)
                 .toList();
     }
 
     public static BookingShortDto mapToBookingShortDto(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
         return new BookingShortDto(
                 booking.getId(),
                 booking.getBooker().getId()

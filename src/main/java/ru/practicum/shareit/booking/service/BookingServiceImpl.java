@@ -27,7 +27,6 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
-
     @Override
     @Transactional
     public BookingDto createBooking(Long userId, BookingRequest request) {

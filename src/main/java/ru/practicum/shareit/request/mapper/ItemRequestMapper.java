@@ -8,6 +8,9 @@ import ru.practicum.shareit.request.model.ItemRequest;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemRequestMapper {
     public static ItemRequestDto mapToItemRequestDto(ItemRequest itemRequest) {
+        if (itemRequest == null) {
+            return null;
+        }
         return new ItemRequestDto(itemRequest.getId(),
                 itemRequest.getDescription(),
                 itemRequest.getRequestor(),

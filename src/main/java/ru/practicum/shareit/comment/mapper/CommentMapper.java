@@ -12,6 +12,9 @@ import java.util.List;
 
 public class CommentMapper {
     public static CommentDto mapCommentToDto(Comment comment) {
+        if (comment == null) {
+            return null;
+        }
         return new CommentDto(
                 comment.getId(),
                 comment.getText(),
@@ -22,12 +25,18 @@ public class CommentMapper {
 
 
     public static List<CommentDto> mapCommentToDtoList(Collection<Comment> comments) {
+        if (comments == null) {
+            return null;
+        }
         return comments.stream()
                 .map(CommentMapper::mapCommentToDto)
                 .toList();
     }
 
     public static Comment mapToComment(CommentRequest comment, User user, Item item) {
+        if (comment == null) {
+            return null;
+        }
         Comment newComment = new Comment();
         newComment.setText(comment.getText());
         newComment.setAuthor(user);
