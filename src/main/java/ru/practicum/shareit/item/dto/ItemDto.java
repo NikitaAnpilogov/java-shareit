@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.comment.dto.CommentDto;
+
+import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
@@ -22,5 +26,7 @@ public class ItemDto {
     private String description;
     @NotNull(message = "Статус доступности должен быть указан")
     private Boolean available;
-    private Long requestId;
+    private BookingShortDto lastBooking;
+    private BookingShortDto nextBooking;
+    private List<CommentDto> comments;
 }
