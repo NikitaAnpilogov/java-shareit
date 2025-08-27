@@ -15,16 +15,4 @@ public class UserMapper {
                 .email(user.getEmail())
                 .build();
     }
-
-    public static User toUser(UserDto userDto) {
-        if (userDto == null) {
-            return null;
-        }
-
-        return User.builder()
-                .id(userDto.getId())
-                .name(userDto.getName())
-                .email(userDto.getEmail())
-                .build();
-    }
 }

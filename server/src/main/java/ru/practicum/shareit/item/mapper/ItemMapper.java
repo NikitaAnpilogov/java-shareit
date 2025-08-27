@@ -22,19 +22,6 @@ public class ItemMapper {
                 .build();
     }
 
-    public static Item toItem(ItemDto itemDto) {
-        if (itemDto == null) {
-            return null;
-        }
-
-        return Item.builder()
-                .id(itemDto.getId())
-                .name(itemDto.getName())
-                .description(itemDto.getDescription())
-                .available(itemDto.getAvailable())
-                .build();
-    }
-
     public static ItemDto mapToItemDtoWithBookings(Item item, List<CommentDto> comments) {
         if (item == null) {
             return null;

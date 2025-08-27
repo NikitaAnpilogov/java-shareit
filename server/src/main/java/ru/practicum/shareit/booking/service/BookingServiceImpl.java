@@ -27,6 +27,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
+
     @Override
     @Transactional
     public BookingDto createBooking(Long userId, BookingRequest request) {
@@ -91,7 +92,8 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime now = LocalDateTime.now();
         bookings = switch (state) {
             case "ALL" -> bookingRepository.findByBookerIdOrderByStartDesc(userId);
-            case "CURRENT" -> bookingRepository.findByBookerIdAndStartBeforeAndEndAfter(userId, now, now);
+            case "CURRENT" ->
+                    bookingRepository.findByBookerIdAndStartBeforeAndEndAfter(userId, now, now);
             case "PAST" -> bookingRepository.findByBookerIdAndEndBefore(userId, now);
             case "FUTURE" -> bookingRepository.findByBookerIdAndStartAfter(userId, now);
             default -> throw new IllegalStateException("Неверный параметр state");

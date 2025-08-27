@@ -30,14 +30,4 @@ public class BookingMapper {
                 .map(BookingMapper::mapToBookingDto)
                 .toList();
     }
-
-    public static BookingShortDto mapToBookingShortDto(Booking booking) {
-        if (booking == null) {
-            return null;
-        }
-        return new BookingShortDto(
-                booking.getId(),
-                booking.getBooker().getId()
-        );
-    }
 }
