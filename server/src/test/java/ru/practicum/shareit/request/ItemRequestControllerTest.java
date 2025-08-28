@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.item.dto.ItemShortDto;
@@ -92,5 +93,32 @@ public class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(itemRequestDto.getId()))
                 .andExpect(jsonPath("$.items[0].id").value(itemShortDto.getId()));
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenUserIdHeaderMissing() throws Exception {
+        mockMvc.perform(get("/requests/all"))
+                .andExpect(status().is5xxServerError());
+    }
+
+    @Test
+    void shouldFindAllRequestsByOtherUsers() throws Exception {
+        // Подготавливаем данные для пагинации
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "created"));
+        Page<ItemRequest> mockPage = new PageImpl<>(List.of(itemRequest), pageable, 1);
+
+        // Мокируем сервис
+        when(itemRequestService.findAllRequestsByOtherUsers(eq(1L), any(Pageable.class)))
+                .thenReturn(mockPage);
+
+        mockMvc.perform(get("/requests/all")
+                        .header("X-Sharer-User-Id", 1)
+                        .param("page", "0")
+                        .param("size", "10")
+                        .param("sort", "created,desc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(itemRequestDto.getId()))
+                .andExpect(jsonPath("$[0].description").value(itemRequestDto.getDescription()));
     }
 }

@@ -14,25 +14,25 @@ public class ItemMapper {
             return null;
         }
 
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
+        ItemDto result = new ItemDto();
+        result.setId(item.getId());
+        result.setName(item.getName());
+        result.setDescription(item.getDescription());
+        result.setAvailable(item.getAvailable());
+        return result;
     }
 
     public static ItemDto mapToItemDtoWithBookings(Item item, List<CommentDto> comments) {
         if (item == null) {
             return null;
         }
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .comments(comments != null ? comments : List.of())
-                .build();
+        ItemDto result = new ItemDto();
+        result.setId(item.getId());
+        result.setName(item.getName());
+        result.setDescription(item.getDescription());
+        result.setAvailable(item.getAvailable());
+        result.setComments(comments != null ? comments : List.of());
+        return result;
     }
 
     public static Collection<ItemDto> mapToItemDtoList(Collection<Item> search) {

@@ -14,12 +14,12 @@ public class ItemRequestMapper {
         if (itemRequest == null) {
             return null;
         }
-        return ItemRequestDto.builder()
-                .id(itemRequest.getId())
-                .description(itemRequest.getDescription())
-                .requesterId(itemRequest.getId())
-                .created(itemRequest.getCreated())
-                .build();
+        ItemRequestDto result = new ItemRequestDto();
+        result.setId(itemRequest.getId());
+        result.setDescription(itemRequest.getDescription());
+        result.setRequesterId(itemRequest.getId());
+        result.setCreated(itemRequest.getCreated());
+        return result;
     }
 
     public static List<ItemRequestDto> mapToItemRequestDtoList(Collection<ItemRequest> requests) {

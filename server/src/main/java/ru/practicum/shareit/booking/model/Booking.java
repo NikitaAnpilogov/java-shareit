@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"booker", "item"})

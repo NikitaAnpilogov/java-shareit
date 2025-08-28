@@ -9,10 +9,10 @@ public class UserMapper {
             return null;
         }
 
-        return UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .build();
+        UserDto result = new UserDto();
+        result.setId(user.getId());
+        result.setName(user.getName());
+        result.setEmail(user.getEmail());
+        return result;
     }
 }

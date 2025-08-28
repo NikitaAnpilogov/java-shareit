@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "requests")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemRequest {

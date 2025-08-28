@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequest;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
@@ -284,5 +285,12 @@ class BookingServiceTest {
         Collection<BookingDto> result = bookingService.findBookingByOwner(1L);
 
         assertThat(result).isNotNull();
+    }
+
+    @Test
+    void mapBookingToBookingShort() {
+        Booking booking = new Booking(1L, LocalDateTime.now(), LocalDateTime.now(), new Item(), new User(1L, "name", "description"), BookingStatus.APPROVED);
+        BookingShortDto bookingShortDto = new BookingShortDto(1L, booking.getBooker().getId());
+        assertThat(bookingShortDto.getBookerId()).isEqualTo(1L);
     }
 }
