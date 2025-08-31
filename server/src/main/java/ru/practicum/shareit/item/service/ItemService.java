@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.comment.mapper.CommentMapper;
@@ -36,9 +38,26 @@ public class ItemService {
     private final BookingRepository bookingRepository;
 
     public Collection<ItemDto> findAllByUser(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
         return itemRepository.findAllByOwnerId(userId)
                 .stream()
                 .map(ItemMapper::toItemDto)
+                .peek(itemDto -> {
+                    Booking lastBooking = bookingRepository
+                            .findFirstByItemIdAndEndBeforeOrderByEndDesc(itemDto.getId(), now)
+                            .orElse(null);
+
+                    Booking nextBooking = bookingRepository
+                            .findFirstByItemIdAndStartAfterOrderByStartAsc(itemDto.getId(), now)
+                            .orElse(null);
+
+                    if (lastBooking != null) {
+                        itemDto.setLastBooking(new BookingShortDto(lastBooking.getId(), lastBooking.getBooker().getId()));
+                    }
+                    if (nextBooking != null) {
+                        itemDto.setNextBooking(new BookingShortDto(nextBooking.getId(), nextBooking.getBooker().getId()));
+                    }
+                })
                 .toList();
     }
 

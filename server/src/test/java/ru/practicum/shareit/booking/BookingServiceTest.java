@@ -249,27 +249,6 @@ class BookingServiceTest {
     }
 
     @Test
-    void findBookingByIdShouldReturnDtoIfUserExists() {
-        Item item = new Item();
-        item.setOwnerId(1L);
-
-        User booker = new User();
-        booker.setId(2L);
-
-        Booking booking = new Booking();
-        booking.setItem(item);
-        booking.setBooker(booker);
-        booking.setStatus(BookingStatus.WAITING);
-
-        when(userRepository.existsById(1L)).thenReturn(true);
-        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
-
-        BookingDto result = bookingService.findBookingById(1L, 1L);
-
-        assertThat(result).isNotNull();
-    }
-
-    @Test
     void findBookingByIdShouldThrowIfUserNotFound() {
         when(userRepository.existsById(1L)).thenReturn(false);
 

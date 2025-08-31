@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.enums.BookingStatus;
 import ru.practicum.shareit.exceptions.NotFoundException;
+import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
@@ -77,13 +78,21 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto findBookingById(Long bookingId, Long userId) {
-        if (userRepository.existsById(userId)) {
-            Booking booking = bookingRepository.findById(bookingId)
-                    .orElseThrow(() -> new NotFoundException("Бронирование по данному ID не найдено"));
-            return BookingMapper.mapToBookingDto(booking);
-        } else {
-            throw new NotFoundException("Пользователь с данным ID не найден");
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с данным ID не найден"));
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Бронирование по данному ID не найдено"));
+
+        boolean isBooker = booking.getBooker().getId().equals(userId);
+        boolean isOwner = booking.getItem().getOwnerId().equals(userId);
+
+        if (!isBooker && !isOwner) {
+            throw new ValidationException("Доступ к бронированию запрещен. " +
+                    "Только автор бронирования или владелец вещи могут просматривать бронирование");
         }
+
+        return BookingMapper.mapToBookingDto(booking);
     }
 
     @Override
@@ -95,6 +104,8 @@ public class BookingServiceImpl implements BookingService {
             case "CURRENT" -> bookingRepository.findByBookerIdAndStartBeforeAndEndAfter(userId, now, now);
             case "PAST" -> bookingRepository.findByBookerIdAndEndBefore(userId, now);
             case "FUTURE" -> bookingRepository.findByBookerIdAndStartAfter(userId, now);
+            case "WAITING" -> bookingRepository.findByBookerIdAndStatus(userId, BookingStatus.WAITING);
+            case "REJECTED" -> bookingRepository.findByBookerIdAndStatus(userId, BookingStatus.REJECTED);
             default -> throw new IllegalStateException("Неверный параметр state");
         };
 
